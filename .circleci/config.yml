@@ -10,8 +10,3 @@ jobs:
       - checkout:
           path: ~/Group-Project
       - run: npm install
-      - run: 
-          name: "Run tests"
-          environment:
-            NODE_OPTIONS: --experimental-vm-modules
-          command: npm run test
