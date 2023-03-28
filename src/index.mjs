@@ -3,7 +3,7 @@
 const mysql = require("mysql2/promise"); */
 import express from "express";
 import mysql from "mysql2/promise";
-
+import Databaseservice from "./services/database.service.mjs";
 /* Create express instance */
 const app = express();
 const port = 3000;
@@ -14,15 +14,8 @@ app.set("view engine", "pug");
 // Serve assets from 'static' folder
 app.use(express.static("static"));
 
-console.log(process.env.NODE_ENV);
-
-/* Setup database connection */
-const db = await mysql.createConnection({
-  host: process.env.DATABASE_HOST || "localhost",
-  user: "user",
-  password: "password",
-  database: "world",
-});
+const db = await Databaseservice.connect();
+const { conn } = db;
 
 /* Landing route */
 app.get("/", (req, res) => {
@@ -50,22 +43,22 @@ app.get("/about", (req, res) => {
 });
 
 app.get("/cities", async (req, res) => {
-  try {
-    // Fetch cities from database
-    const [rows, fields] = await db.execute("SELECT * FROM `city`");
-    /* Render cities.pug with data passed as plain object */
-    return res.render("cities", { rows, fields });
-  } catch (err) {
-    console.error(err);
-  }
+  const [rows, fields] = await db.getCities();
+  /* Render cities.pug with data passed as plain object */
+  return res.render("cities", { rows, fields });
 });
+
+app.get('/cities/:id', async (req, res) => {
+  const cityId = req.params.id;
+  const city = await db.getCity(cityId);
+  return res.render('city', { city });
+})
 
 // Returns JSON array of cities
 app.get("/api/cities", async (req, res) => {
-  const [rows, fields] = await db.execute("SELECT * FROM `city`");
+  const [rows, fields] = await db.getCities();
   return res.send(rows);
 });
-
 // Run server!
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
