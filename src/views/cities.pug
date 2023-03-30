@@ -7,12 +7,15 @@ block content
   h2 Cities
   table
     thead
-      th.text-center 🏴
+      th ID
+      th.text-center Country
       th City
-      th.number Population
+      th Population
     tbody
-      each row in rows
+      each row, i in rows
         tr
+          td.fit
+            a(href=`/cities/${i + 1}`) #{i + 1}
           td.fit #{row.CountryCode}
           td #{row.Name}
           - const population = new Intl.NumberFormat().format(row.Population);
