@@ -1,22 +1,24 @@
-extends layout.pug
-
-block head
-  link(rel="stylesheet", href="/cities.css")
+extends layout
 
 block content
-  h2 Cities
+  h1 All Cities
+  p Sort by:
+    a(href="/cities?sort-by=name" class=(sortBy === 'Name ASC' ? 'active' : '')) Name
+    |  |
+    a(href="/cities?sort-by=population" class=(sortBy === 'Population DESC' ? 'active' : '')) Population
   table
     thead
-      th ID
-      th.text-center Country
-      th City
-      th Population
+      tr
+        th Name
+        th CountryCode
+        th District
+        th Population
     tbody
-      each row, i in rows
+      each row in rows
         tr
-          td.fit
-            a(href=`/cities/${i + 1}`) #{i + 1}
-          td.fit #{row.CountryCode}
-          td #{row.Name}
+          td
+            a(href=`/cities/${row.ID}`) #{row.Name}
+          td.fit(data-tippy-content=row.Country ? row.Country.Name : '') #{row.CountryCode}
+          td(data-tippy-content=row.District) #{row.District}
           - const population = new Intl.NumberFormat().format(row.Population);
-          td.fit.number #{population}
+          td.fit.number(data-tippy-content=population) #{population}
