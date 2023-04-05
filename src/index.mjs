@@ -44,11 +44,27 @@ app.get("/about", (req, res) => {
   res.render("about", { title: "Boring about page" });
 });
 
-app.get("/cities", async (req, res) => {
-  const [rows, fields] = await db.getCities();
-  /* Render cities.pug with data passed as plain object */
-  return res.render("cities", { rows, fields });
+app.get('/cities', async (req, res) => {
+  let sortBy;
+  switch (req.query['sort-by']) {
+    case 'name':
+      sortBy = 'Name ASC';
+      break;
+    case 'population':
+      sortBy = 'Population DESC';
+      break;
+    default:
+      sortBy = 'Name ASC';
+  }
+
+  const [rows, fields] = await db.conn.execute(`
+    SELECT * FROM city
+    ORDER BY ${sortBy}
+  `);
+
+  res.render('cities', { rows, fields, sortBy });
 });
+
 
 app.get('/cities/:id', async (req, res) => {
   const cityId = req.params.id;
@@ -79,10 +95,6 @@ app.get("/api/countries", async (req, res) => {
   const countries = await db.getCountries();
   res.send(countries);
 });
-
-
-
-
 
 // Run server!
 app.listen(port, () => {
