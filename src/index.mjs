@@ -91,10 +91,50 @@ app.get("/api/cities", async (req, res) => {
   return res.send(rows);
 });
 
-app.get("/api/countries", async (req, res) => {
-  const countries = await db.getCountries();
-  res.send(countries);
+app.get('/countries', async (req, res) => {
+  let sortBy;
+  switch (req.query['sort-by']) {
+    case 'name':
+      sortBy = 'Name ASC';
+      break;
+    case 'population':
+      sortBy = 'Population DESC';
+      break;
+    default:
+      sortBy = 'Name ASC';
+  }
+
+  const [rows, fields] = await db.conn.execute(`
+    SELECT * FROM country
+    ORDER BY ${sortBy}
+  `);
+
+  res.render('countries', { rows, fields, sortBy });
 });
+
+app.get('/countries/:id', async (req, res) => {
+  const countryCode = req.params.id;
+  const country = await db.getCountry(countryCode);
+  return res.render('country', { country });
+})
+
+app.post('/countries/:id', async (req, res) => {
+  const countryCode = req.params.id;
+  const { name } = req.body;
+  const sql = `
+    UPDATE country
+    SET Name = '${name}'
+    WHERE Code = '${countryCode}';
+  `
+  await conn.execute(sql);
+  return res.redirect(`/countries/${countryCode}`);
+})
+
+app.get("/api/countries", async (req, res) => {
+  const [rows, fields] = await db.getCountries();
+  return res.send(rows);
+});
+
 
 // Run server!
 app.listen(port, () => {
