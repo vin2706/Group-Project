@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1 All Countries
+  p Sort by:
+    a(href="/countries?sort-by=name" class=(sortBy === 'Name ASC' ? 'active' : '')) Name
+    |  |
+    a(href="/countries?sort-by=population" class=(sortBy === 'Population DESC' ? 'active' : '')) Population
+  table
+    thead
+      tr
+        th Name
+        th Continent
+        th Population
+    tbody
+      each row in rows
+        tr
+          td
+            a(href=`/countries/${row.Code}`) #{row.Name}
+          td(data-tippy-content=row.Continent) #{row.Continent}
+          - const population = new Intl.NumberFormat().format(row.Population);
+          td.fit.number(data-tippy-content=population) #{population}
