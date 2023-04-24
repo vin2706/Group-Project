@@ -9,14 +9,21 @@ block content
   table
     thead
       tr
+        th Code
         th Name
         th Continent
+        th Region
         th Population
+        th Capital
     tbody
-      each row in rows
+      each row in rows                                                                                                                                                                                                       
         tr
+          td
+            a(href=`/countries/${row.Code}`) #{row.Code}
           td
             a(href=`/countries/${row.Code}`) #{row.Name}
           td(data-tippy-content=row.Continent) #{row.Continent}
+          td #{row.Region}
           - const population = new Intl.NumberFormat().format(row.Population);
           td.fit.number(data-tippy-content=population) #{population}
+          td #{row.Capital}
