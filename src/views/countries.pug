@@ -6,6 +6,10 @@ block content
     a(href="/countries?sort-by=name" class=(sortBy === 'Name ASC' ? 'active' : '')) Name
     |  |
     a(href="/countries?sort-by=population" class=(sortBy === 'Population DESC' ? 'active' : '')) Population
+    |  |
+    a(href="/countries?sort-by=continent" class=(sortBy === 'Continent DESC' ? 'active' : '')) Continent
+    |  |
+    a(href="/countries?sort-by=region" class=(sortBy === 'Region DESC' ? 'active' : '')) Region
   table
     thead
       tr
@@ -18,8 +22,7 @@ block content
     tbody
       each row in rows                                                                                                                                                                                                       
         tr
-          td
-            a(href=`/countries/${row.Code}`) #{row.Code}
+          td.fit(data-tippy-content=row.Code) #{row.Code}
           td
             a(href=`/countries/${row.Code}`) #{row.Name}
           td(data-tippy-content=row.Continent) #{row.Continent}
