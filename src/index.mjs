@@ -100,8 +100,15 @@ app.get('/countries', async (req, res) => {
     case 'population':
       sortBy = 'Population DESC';
       break;
+    case 'continent':
+      sortBy = 'Continent ASC, Population DESC';
+      break;
+    case 'region':
+      sortBy = 'Region ASC, Population DESC';
+      break;
     default:
       sortBy = 'Name ASC';
+    
   }
 
   const [rows, fields] = await db.conn.execute(`
