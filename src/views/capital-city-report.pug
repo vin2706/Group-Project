@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  table
+    thead
+      tr
+        th City
+        th Country
+        th Population
+    tbody
+      each row in rows
+        tr
+          td= row.City
+          td= row.Country
+          td= row.Population

@@ -142,6 +142,19 @@ app.get("/api/countries", async (req, res) => {
   return res.send(rows);
 });
 
+app.get('/capital-city-report', async (req, res) => {
+  const [rows, fields] = await db.conn.execute(`
+    SELECT c.Name AS City, co.Name AS Country, c.Population
+    FROM city c
+    JOIN country co ON c.CountryCode = co.Code
+    WHERE c.ID = co.Capital
+    ORDER BY co.Name ASC
+  `);
+
+  res.render('capital-city-report', { rows });
+});
+
+
 
 // Run server!
 app.listen(port, () => {
