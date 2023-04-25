@@ -111,12 +111,21 @@ app.get('/countries', async (req, res) => {
     
   }
 
-  const [rows, fields] = await db.conn.execute(`
-    SELECT * FROM country
-    ORDER BY ${sortBy}
-  `);
+  try {
+    const [rows, fields] = await db.conn.execute(`
+      SELECT country.Code, country.Name, country.Continent, country.Region, country.Population, city.Name AS Capital
+      FROM country
+      JOIN city ON country.Capital = city.ID
+      ORDER BY ${sortBy}
+    `);
+    res.render('countries', { rows, fields, sortBy });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+  
 
-  res.render('countries', { rows, fields, sortBy });
+  //res.render('countries', { rows, fields, sortBy });
 });
 
 app.get('/countries/:id', async (req, res) => {

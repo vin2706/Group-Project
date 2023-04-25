@@ -2,6 +2,8 @@ import mysql from "mysql2/promise";
 import City from "../models/city.mjs";
 import Country from "../models/country.mjs";
 
+
+
 export default class DatabaseService {
   conn;
 
@@ -88,14 +90,21 @@ async getCountries() {
 
 /* Get a particular country by code, including cities information */
 async getCountry(countryCode) {
-  const sql = `
-      SELECT country.*, city.ID as CityID, city.Name as CityName, city.District, city.Population as CityPopulation
-      FROM country
-      INNER JOIN city ON city.CountryCode = country.Code
-      WHERE country.Code = "${countryCode}"
-  `;
-  const [rows, fields] = await this.conn.execute(sql);
-  /* Get the first result of the query (we're looking up the country by code, which should be unique) */
+  const [rows, fields] = await this.conn.execute(`
+    SELECT 
+      c.Code, 
+      c.Name, 
+      c.Continent, 
+      c.Region, 
+      c.Population, 
+      ct.Name AS Capital
+    FROM 
+      country c 
+      LEFT JOIN city ct ON c.Capital = ct.ID
+    WHERE 
+      c.Code = '${countryCode}'
+  `);
+  
   const data = rows[0];
   const country = new Country(
     data.Code,
@@ -104,20 +113,11 @@ async getCountry(countryCode) {
     data.Region,
     data.Population
   );
-  const cities = [];
-  rows.forEach(row => {
-    const city = new City(
-      row.CityID,
-      row.CityName,
-      row.CountryCode,
-      row.District,
-      row.CityPopulation
-    );
-    cities.push(city);
-  });
-  country.cities = cities;
+  country.capital = data.Capital;
+
   return country;
 }
+
  
   
 }
