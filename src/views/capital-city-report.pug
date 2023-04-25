@@ -6,10 +6,15 @@ block content
       tr
         th City
         th Country
+        th Continent 
+        th Region
         th Population
     tbody
       each row in rows
         tr
           td= row.City
           td= row.Country
-          td= row.Population
+          td(data-tippy-content=row.Continent) #{row.Continent}
+          td #{row.Region}
+          - const population = new Intl.NumberFormat().format(row.Population);
+          td.fit.number(data-tippy-content=population) #{population}
