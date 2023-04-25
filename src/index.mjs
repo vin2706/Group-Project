@@ -53,6 +53,12 @@ app.get('/cities', async (req, res) => {
     case 'population':
       sortBy = 'Population DESC';
       break;
+    case 'continent':
+      sortBy = 'Continent ASC, Population DESC';
+      break;
+    case 'region':
+      sortBy = 'Region ASC, Population DESC';
+      break;
     case 'district':
       sortBy = 'District ASC, Population DESC';
       break;
@@ -61,7 +67,7 @@ app.get('/cities', async (req, res) => {
   }
 
   const [rows, fields] = await db.conn.execute(`
-    SELECT city.ID, city.Name, country.Name AS Country, city.District, city.Population
+    SELECT city.ID, city.Name, country.Name AS Country, country.Continent AS Continent, country.Region AS Region, city.District, city.Population
     FROM city
     JOIN country ON city.CountryCode = country.Code
     ORDER BY ${sortBy}
@@ -160,7 +166,7 @@ app.get("/api/countries", async (req, res) => {
 
 app.get('/capital-city-report', async (req, res) => {
   const [rows, fields] = await db.conn.execute(`
-    SELECT c.Name AS City, co.Name AS Country, c.Population
+    SELECT c.Name AS City, co.Name AS Country, co.Continent AS Continent, co.Region AS Region, c.Population
     FROM city c
     JOIN country co ON c.CountryCode = co.Code
     WHERE c.ID = Capital
