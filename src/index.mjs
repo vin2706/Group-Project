@@ -147,7 +147,7 @@ app.get('/capital-city-report', async (req, res) => {
     SELECT c.Name AS City, co.Name AS Country, c.Population
     FROM city c
     JOIN country co ON c.CountryCode = co.Code
-    WHERE c.ID = co.Capital
+    WHERE c.ID = Capital
     ORDER BY co.Name ASC
   `);
 
