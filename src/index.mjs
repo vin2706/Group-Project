@@ -53,12 +53,17 @@ app.get('/cities', async (req, res) => {
     case 'population':
       sortBy = 'Population DESC';
       break;
+    case 'district':
+      sortBy = 'District ASC, Population DESC';
+      break;
     default:
       sortBy = 'Name ASC';
   }
 
   const [rows, fields] = await db.conn.execute(`
-    SELECT * FROM city
+    SELECT city.ID, city.Name, country.Name AS Country, city.District, city.Population
+    FROM city
+    JOIN country ON city.CountryCode = country.Code
     ORDER BY ${sortBy}
   `);
 
@@ -111,12 +116,21 @@ app.get('/countries', async (req, res) => {
     
   }
 
-  const [rows, fields] = await db.conn.execute(`
-    SELECT * FROM country
-    ORDER BY ${sortBy}
-  `);
+  try {
+    const [rows, fields] = await db.conn.execute(`
+      SELECT country.Code, country.Name, country.Continent, country.Region, country.Population, city.Name AS Capital
+      FROM country
+      JOIN city ON country.Capital = city.ID
+      ORDER BY ${sortBy}
+    `);
+    res.render('countries', { rows, fields, sortBy });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+  
 
-  res.render('countries', { rows, fields, sortBy });
+  //res.render('countries', { rows, fields, sortBy });
 });
 
 app.get('/countries/:id', async (req, res) => {
@@ -131,7 +145,9 @@ app.post('/countries/:id', async (req, res) => {
   const sql = `
     UPDATE country
     SET Name = '${name}'
-    WHERE Code = '${countryCode}';
+    FROM city c
+    JOIN country co ON c.CountryCode = co.Code
+    WHERE c.ID = Capital
   `
   await conn.execute(sql);
   return res.redirect(`/countries/${countryCode}`);
@@ -141,6 +157,19 @@ app.get("/api/countries", async (req, res) => {
   const [rows, fields] = await db.getCountries();
   return res.send(rows);
 });
+
+app.get('/capital-city-report', async (req, res) => {
+  const [rows, fields] = await db.conn.execute(`
+    SELECT c.Name AS City, co.Name AS Country, c.Population
+    FROM city c
+    JOIN country co ON c.CountryCode = co.Code
+    WHERE c.ID = Capital
+    ORDER BY co.Name ASC
+  `);
+
+  res.render('capital-city-report', { rows });
+});
+
 
 
 // Run server!

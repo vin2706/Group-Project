@@ -6,11 +6,13 @@ block content
     a(href="/cities?sort-by=name" class=(sortBy === 'Name ASC' ? 'active' : '')) Name
     |  |
     a(href="/cities?sort-by=population" class=(sortBy === 'Population DESC' ? 'active' : '')) Population
+    |  |
+    a(href="/cities?sort-by=district" class=(sortBy === 'District DESC' ? 'active' : '')) District
   table
     thead
       tr
         th Name
-        th CountryCode
+        th Country
         th District
         th Population
     tbody
@@ -18,7 +20,7 @@ block content
         tr
           td
             a(href=`/cities/${row.ID}`) #{row.Name}
-          td.fit(data-tippy-content=row.Country ? row.Country.Name : '') #{row.CountryCode}
+          td.fit(data-tippy-content=row.Country ? row.Country.Name : '') #{row.Country}
           td(data-tippy-content=row.District) #{row.District}
           - const population = new Intl.NumberFormat().format(row.Population);
           td.fit.number(data-tippy-content=population) #{population}
