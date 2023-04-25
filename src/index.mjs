@@ -53,6 +53,9 @@ app.get('/cities', async (req, res) => {
     case 'population':
       sortBy = 'Population DESC';
       break;
+    case 'district':
+      sortBy = 'District ASC, Population DESC';
+      break;
     default:
       sortBy = 'Name ASC';
   }
@@ -140,7 +143,9 @@ app.post('/countries/:id', async (req, res) => {
   const sql = `
     UPDATE country
     SET Name = '${name}'
-    WHERE Code = '${countryCode}';
+    FROM city c
+    JOIN country co ON c.CountryCode = co.Code
+    WHERE c.ID = Capital
   `
   await conn.execute(sql);
   return res.redirect(`/countries/${countryCode}`);
