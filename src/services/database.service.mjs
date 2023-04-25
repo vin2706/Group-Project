@@ -39,13 +39,20 @@ export default class DatabaseService {
   /* Get a particular city by ID, including country information */
   async getCity(cityId) {
     const sql = `
-        SELECT city.*, country.Name AS Country, country.Region, country.Continent, country.Population as CountryPopulation
-        FROM city
+      SELECT 
+        city.*, 
+        country.Name AS CountryName, 
+        country.Region, 
+        country.Continent, 
+        country.Population AS CountryPopulation
+      FROM 
+        city
         INNER JOIN country ON country.Code = city.CountryCode
-        WHERE city.ID = ${cityId}
+      WHERE 
+        city.ID = ${cityId}
     `;
     const [rows, fields] = await this.conn.execute(sql);
-    /* Get the first result of the query (we're looking up the city by ID, which should be unique) */
+  
     const data = rows[0];
     const city = new City(
       data.ID,
@@ -55,8 +62,8 @@ export default class DatabaseService {
       data.Population
     );
     const country = new Country(
-      data.Code,
-      data.Country,
+      data.CountryCode,
+      data.CountryName,
       data.Continent,
       data.Region,
       data.CountryPopulation
@@ -64,6 +71,7 @@ export default class DatabaseService {
     city.country = country;
     return city;
   }
+  
 
   /* Delete a city by ID */
   async removeCity(cityId) {

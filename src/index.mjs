@@ -61,7 +61,9 @@ app.get('/cities', async (req, res) => {
   }
 
   const [rows, fields] = await db.conn.execute(`
-    SELECT * FROM city
+    SELECT city.ID, city.Name, country.Name AS Country, city.District, city.Population
+    FROM city
+    JOIN country ON city.CountryCode = country.Code
     ORDER BY ${sortBy}
   `);
 
