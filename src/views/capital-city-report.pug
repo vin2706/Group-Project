@@ -1,6 +1,15 @@
 extends layout
 
 block content
+  h1 All Capital Cities
+  p Sort by:
+    a(href="/capital-city-report?sort-by=name" class=(sortBy === 'Name ASC' ? 'active' : '')) Name
+    |  |
+    a(href="/capital-city-report?sort-by=population" class=(sortBy === 'Population DESC' ? 'active' : '')) Population
+    |  |
+    a(href="/capital-city-report?sort-by=continent" class=(sortBy === 'Continent DESC' ? 'active' : '')) Continent
+    |  |
+    a(href="/capital-city-report?sort-by=region" class=(sortBy === 'Region DESC' ? 'active' : '')) Region
   table
     thead
       tr
