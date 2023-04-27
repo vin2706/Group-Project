@@ -10,6 +10,14 @@ block content
     a(href="/capital-city-report?sort-by=continent" class=(sortBy === 'Continent DESC' ? 'active' : '')) Continent
     |  |
     a(href="/capital-city-report?sort-by=region" class=(sortBy === 'Region DESC' ? 'active' : '')) Region
+  form(method="get" action="/countries")
+    label(for="limit") Show:
+    select(name="limit" id="limit")
+      option(value="10" selected) 10
+      option(value="20") 20
+      option(value="50") 50
+      option(value="100") 100
+    button(type="submit") Go
   table
     thead
       tr
