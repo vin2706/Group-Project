@@ -238,6 +238,48 @@ app.post('/capital-city-report', async (req, res) => {
 });
 
 
+// Population report route
+app.get('/population', async (req, res) => {
+  const { continent, region, country } = req.query;
+
+  let sql = `
+    SELECT country.Name, SUM(country.Population) as total_population, SUM(CASE WHEN city.Population > 0 THEN city.Population ELSE 0 END) as urban_population
+    FROM country
+    LEFT JOIN city ON country.Code = city.CountryCode
+    WHERE 1=1
+  `;
+
+  if (continent) {
+    sql += ` AND country.Continent = '${continent}'`;
+  }
+  if (region) {
+    sql += ` AND country.Region = '${region}'`;
+  }
+  if (country) {
+    sql += ` AND country.Name = '${country}'`;
+  }
+
+  sql += `
+    GROUP BY country.Name
+  `;
+
+  console.log(sql);
+
+  const [[{ Name, total_population, urban_population } = {}]] = await db.conn.execute(sql);
+
+  const rural_population = total_population - urban_population;
+  const urban_percentage = ((urban_population / total_population) * 100).toFixed(2);
+  const rural_percentage = ((rural_population / total_population) * 100).toFixed(2);
+
+  const data = { Name, total_population, urban_population, urban_percentage, rural_population, rural_percentage };
+
+  res.render('population', { data });
+});
+
+
+
+
+
 // Run server!
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

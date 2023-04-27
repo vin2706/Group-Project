@@ -18,8 +18,8 @@ block content
       option(value="50") 50
       option(value="100") 100
     button(type="submit") Go
-  table
-    thead
+  table(style="border-collapse: collapse; width: 100%;")
+    thead(style="background-color: #f2f2f2;")
       tr
         th Code
         th Name
@@ -28,13 +28,14 @@ block content
         th Population
         th Capital
     tbody
-      each row in rows                                                                                                                                                                                                       
-        tr
-          td.fit(data-tippy-content=row.Code) #{row.Code}
-          td
+      each row in rows
+        tr(style="background-color: #{row.Color}")
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;" data-tippy-content=row.Code) #{row.Code}
+          td(style="text-align: left; padding: 8px; border: 1px solid #ddd;")
             a(href=`/countries/${row.Code}`) #{row.Name}
-          td(data-tippy-content=row.Continent) #{row.Continent}
-          td #{row.Region}
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;" data-tippy-content=row.Continent) #{row.Continent}
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;") #{row.Region}
           - const population = new Intl.NumberFormat().format(row.Population);
-          td.fit.number(data-tippy-content=population) #{population}
-          td #{row.Capital}
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;" data-tippy-content=population) #{population}
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;") #{row.Capital}
+

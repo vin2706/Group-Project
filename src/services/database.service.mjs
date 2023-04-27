@@ -96,6 +96,48 @@ async getCountries() {
   }
 }
 
+/* Get population report for a continent */
+async getContinentPopulationReport(continentName) {
+  const sql = `
+    SELECT 
+      SUM(c.Population) as TotalPopulation,
+      SUM(IF(ct.Population > 0, ct.Population, 0)) as UrbanPopulation,
+      SUM(IF(ct.Population = 0, c.Population, 0)) as RuralPopulation
+    FROM 
+      country c
+      LEFT JOIN city ct ON ct.CountryCode = c.Code
+    WHERE 
+      c.Continent = ?
+  `;
+  try {
+    const [rows, fields] = await this.conn.execute(sql, [continentName]);
+    
+    const data = rows[0];
+    const totalPopulation = data.TotalPopulation;
+    const urbanPopulation = data.UrbanPopulation;
+    const ruralPopulation = data.RuralPopulation;
+    const urbanPopulationPercentage = ((urbanPopulation / totalPopulation) * 100).toFixed(2);
+    const ruralPopulationPercentage = ((ruralPopulation / totalPopulation) * 100).toFixed(2);
+
+    const report = {
+      continentName,
+      totalPopulation,
+      urbanPopulation,
+      ruralPopulation,
+      urbanPopulationPercentage: `${urbanPopulationPercentage}%`,
+      ruralPopulationPercentage: `${ruralPopulationPercentage}%`
+    }
+
+    return report;
+  } catch (err) {
+    console.error('Error executing SQL query:', err);
+    throw err;
+  }
+}
+
+
+
+
 /* Get a particular country by code, including cities information */
 async getCountry(countryCode) {
   const [rows, fields] = await this.conn.execute(`
