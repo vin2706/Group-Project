@@ -1,0 +1,8 @@
+extends layout
+
+block content 
+    h2 #{country.name}
+    p #{country.region}
+    form(action=`/countries/${country.code}`, method="POST")
+        input(type="text", name="name", placeholder=country.name)
+        input(type="submit")

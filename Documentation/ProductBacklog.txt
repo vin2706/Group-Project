@@ -1,0 +1,28 @@
+Product Backlog
+
+Define the vision: 
+The main goal of this project is to implement a website/application that is an efficient and functional website, we will be conducting this project as a group to fulfil the organisation needs which is to produce a website that will report on population information. 
+Client needs:
+Our target market applies to everyone since we will be reporting on population information. 
+What the organisation wants is a functional website that has report features such as: 
+•	Largest population to smallest by World, Continent, Region.
+•	Top populated countries by World, Continent, Region.
+•	Cities in World, Continent, Region by largest population to smallest.
+•	Cities in Country, District organised by largest population to smallest.
+•	Top populated cities in World, Continent, Region, Country, District.
+•	Capital cities in World, Continent, Region sorted from largest population to smallest.
+•	Population of people who live and who does not live in the city in Continent, Region, Country.
+On the organisation side they want features for only them to access: 
+•	Population of World, Continent, Region, Country, District and City.
+•	Country Report.
+•	City Report. 
+•	Capital City Report.
+•	Population Report.
+Roadmap: 
+We know our goal which is to implement website/application that reports on population information and to implement the features mentioned above. The ways in which we will improve on the website/application is by taking input from our stakeholders, we will do this by reviewing the progress after every sprint and if the stakeholders would want to add a new idea to it or change something, in addition to the sprints new tasks will get implemented. 
+Create backlog item:
+As a user, I want to be able to input the country I am from along with the population so I can contribute to society in some way, also be able to view other countries information on their population, continent.
+Prioritise items:
+We make sure that features that are high priority such as the specific features that organisation want and are only accessible by them for a reason, this could be due to future work on data analytics. On the user side there are “must-have” priorities, as well as largest population to smallest by Countries, Continent, Region, a benefit to prioritising tasks is that it can improve focus, and result in better use of time.
+Refine and re-prioritise:
+As we are aware of feedback that may get submitted to us by stakeholders and users, we are subjected to make changes and if any additional information has been approved, changes will be made to meet a high quality of work.

@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  h1 All Countries
+  p Sort by:
+    a(href="/countries?sort-by=name" class=(sortBy === 'Name ASC' ? 'active' : '')) Name
+    |  |
+    a(href="/countries?sort-by=population" class=(sortBy === 'Population DESC' ? 'active' : '')) Population
+    |  |
+    a(href="/countries?sort-by=continent" class=(sortBy === 'Continent DESC' ? 'active' : '')) Continent
+    |  |
+    a(href="/countries?sort-by=region" class=(sortBy === 'Region DESC' ? 'active' : '')) Region
+  form(method="get" action="/countries")
+    label(for="limit") Show:
+    select(name="limit" id="limit")
+      option(value="10" selected) 10
+      option(value="20") 20
+      option(value="50") 50
+      option(value="100") 100
+    button(type="submit") Go
+  table(style="border-collapse: collapse; width: 100%;")
+    thead(style="background-color: #f2f2f2;")
+      tr
+        th Code
+        th Name
+        th Continent
+        th Region
+        th Population
+        th Capital
+    tbody
+      each row in rows
+        tr(style="background-color: #{row.Color}")
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;" data-tippy-content=row.Code) #{row.Code}
+          td(style="text-align: left; padding: 8px; border: 1px solid #ddd;")
+            a(href=`/countries/${row.Code}`) #{row.Name}
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;" data-tippy-content=row.Continent) #{row.Continent}
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;") #{row.Region}
+          - const population = new Intl.NumberFormat().format(row.Population);
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;" data-tippy-content=population) #{population}
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;") #{row.Capital}
+
