@@ -18,8 +18,8 @@ block content
       option(value="50") 50
       option(value="100") 100
     button(type="submit") Go
-  table
-    thead
+  table(style="border-collapse: collapse; width: 100%;")
+    thead(style="background-color: #f2f2f2;")
       tr
         th City
         th Country
@@ -28,7 +28,7 @@ block content
         th Population
     tbody
       each row in rows
-        tr
+        tr(style="background-color: #{row.Color}")
           td= row.City
           td= row.Country
           td(data-tippy-content=row.Continent) #{row.Continent}
