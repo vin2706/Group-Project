@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1 Population Report
+
+
+  p Continent: #{data.continent}
+
+  p Region: #{data.region}
+  
+  p Country: #{data.country}
+
+  p Total population: #{data.total_population}
+  p Urban population: #{data.urban_population} (#{data.urban_percentage}%)
+  p Rural population: #{data.rural_population} (#{data.rural_percentage}%)
