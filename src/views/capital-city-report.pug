@@ -29,9 +29,9 @@ block content
     tbody
       each row in rows
         tr(style="background-color: #{row.Color}")
-          td= row.City
-          td= row.Country
-          td(data-tippy-content=row.Continent) #{row.Continent}
-          td #{row.Region}
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;")= row.City
+          td(style="text-align: left; padding: 8px; border: 1px solid #ddd;")= row.Country
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;" data-tippy-content=row.Continent) #{row.Continent}
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;")= row.Region
           - const population = new Intl.NumberFormat().format(row.Population);
-          td.fit.number(data-tippy-content=population) #{population}
+          td(style="text-align: center; padding: 8px; border: 1px solid #ddd;" data-tippy-content=population) #{population}
